@@ -39,13 +39,22 @@
 </head>
 
 <body>
-    <h1>🖼️ Photo Gallery</h1>
+    <h1>🖼️ Pexels Photo Gallery</h1>
     <!-- 🔍 Thanh tìm kiếm -->
     <form method="get" action="/" style="margin-bottom: 20px; text-align: left;">
-        <input type="text" name="q" placeholder="Tìm kiếm ảnh (ví dụ: hổ báo)" value="{{ current_query }}"
-            style="padding: 10px; width: 300px; max-width: 90%; border-radius: 5px; border: 1px solid #ccc;">
+        <input type="text" name="q" placeholder="Type something to search (Ex: Tiger)" value="{{ current_query }}"
+            style="font-size: 16px; padding: 10px; width: 300px; max-width: 90%; border-radius: 5px; border: 1px solid #ccc;">
+        <label for="color">Color:</label>
+        <select id="color" name="c"
+            style="height: 40px; font-size: 16px; padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+            <option value="">All</option>
+            <option value="black">Black</option>
+            <option value="white">White</option>
+            <option value="red">Red</option>
+        </select>
+
         <button type="submit"
-            style="padding: 10px 15px; border: none; background-color: #3498db; color: white; border-radius: 5px; cursor: pointer;">
+            style="height: 40px; padding: 10px; border: none; background-color: #3498db; color: white; border-radius: 5px; cursor: pointer;">
             🔍 Tìm kiếm
         </button>
     </form>

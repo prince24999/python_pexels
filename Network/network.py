@@ -3,9 +3,9 @@ import requests
 from Control.photo import Photo, Root
 
 
-def get_photos(query: str) -> [Photo]:  # type: ignore
+def get_photos(query: str, color: str) -> [Photo]:  # type: ignore
 
-    url = f"https://api.pexels.com/v1/search?query={query}&orientation=landscape&size=large&color=&locale=&page=1&per_page=100"
+    url = f"https://api.pexels.com/v1/search?query={query}&orientation=landscape&size=large&color={color}&locale=&page=1&per_page=100"
     headers = {
         "Authorization": "Y3dDyi8upPyObSyzc6swlKMR0YyGgfLunIoHCvgkXwALQ9cev030eIMQ"
     }
