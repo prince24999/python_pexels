@@ -1,7 +1,7 @@
 import math
 from flask import Flask, render_template, request, jsonify  # type: ignore
 from Network.network import get_photos
-import urllib.parse
+
 
 
 app = Flask(__name__)
@@ -28,18 +28,4 @@ def index():
         total_pages=total_pages
     )
 
-# @app.route("/api/photos")
-# def photos_api():
-#     query = request.args.get("q", "nature")
-#     color = request.args.get("c", "")
-#     page = int(request.args.get("page", 1))
-#     per_page = int(request.args.get("per_page", 20))
 
-#     photos, total_results = get_photos(query, color, page, per_page)
-#     photo_dicts = [photo.to_dict() for photo in photos]  # đảm bảo lớp Photo có to_dict()
-
-#     return jsonify({
-#         "photos": photo_dicts,
-#         "page": page,
-#         "total_results": total_results
-#     })

@@ -6,8 +6,40 @@
     <title>Gallery</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
     <style>
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #ccc;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .spinner-wrapper {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         body {
             font-family: sans-serif;
             padding: 20px;
@@ -111,7 +143,9 @@
             style="height: 40px; padding: 10px; border: none; background-color: #3498db; color: white; border-radius: 5px; cursor: pointer;">
             🔍 Tìm kiếm
         </button>
-        <div style="float:right">
+
+        <div style="float:right; width: 70px; margin-right: 15px;">
+
             <input type="text" name="per_page" placeholder="20" value="{{ per_page }}" title="Photos per page"
                 pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                 onkeypress="if (event.key === 'Enter') { this.form.submit(); }"
@@ -122,24 +156,29 @@
     </form>
     <div class="grid">
         {% for photo in photos %}
-        <div class="card">
+        <!-- <div class="card">
 
             <a href="{{ photo.src.original }}" target="_blank">
                 <img src="{{ photo.src.medium }}" alt="{{ photo.alt }}">
             </a>
             <div class="info"><i>{{ photo.alt }}</i> - 📷 <b>{{ photo.photographer }}</b></div>
-        </div>
-
-        <!-- <div class="card">
-            <a href="{{ photo.src.original }}" target="_blank">
-                <div class="loading-skeleton"></div>
-                <img src="{{ photo.src.medium }}" alt="{{ photo.alt }}">
-            </a>
-            <div class="info"><i>{{ photo.alt }}</i><i class="fa-solid fa-camera"></i> <b>{{ photo.photographer }}</b>
-            </div>
         </div> -->
 
+        <div class="card">
+            <a href="{{ photo.src.original }}" target="_blank">
+                <div class="spinner-wrapper">
+                    <div class="spinner"></div>
+                </div>
+                <img src="{{ photo.src.medium }}" alt="{{ photo.alt }}">
+            </a>
+            <div class="info"><i>{{ photo.alt }}</i> - 📷 <b>{{ photo.photographer }}</b></div>
+        </div>
         {% endfor %}
+    </div>
+
+
+
+
     </div>
 
     <div class="pagination">
@@ -186,6 +225,21 @@
         <p>© 2023 Pexels Photo Gallery. All rights reserved.</p>
         <p>Powered by <a href="https://www.pexels.com/" target="_blank" style="color: #3498db;">Phuc Doan</a></p>
     </footer>
+
+    <script>
+        document.querySelectorAll(".card img").forEach(function (img) {
+            img.addEventListener("load", function () {
+                const spinner = img.previousElementSibling;
+                if (spinner) spinner.style.display = "none"; // Ẩn spinner
+                img.style.display = "block"; // Hiện ảnh
+            });
+
+            // Nếu ảnh đã được cache trước đó
+            if (img.complete) {
+                img.dispatchEvent(new Event("load"));
+            }
+        });
+    </script>
 
 
 
