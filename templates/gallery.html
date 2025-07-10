@@ -6,6 +6,33 @@
     <title>Gallery</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+        /* :root {
+            --bg-color: #f5f5f5;
+            --text-color: #333;
+            --card-bg: white;
+            --card-shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode {
+            --bg-color: #1e1e1e;
+            --text-color: #eee;
+            --card-bg: #2a2a2a;
+            --card-shadow: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        } */
+
+        /* .card {
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 6px var(--card-shadow);
+        } */
+
+        /* Pagination hover active vẫn như trước, không cần sửa nếu dùng biến màu */
+
+
         body {
             font-family: sans-serif;
             padding: 20px;
@@ -35,11 +62,61 @@
             font-size: 0.9em;
             color: #555;
         }
+
+        .pagination {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 6px;
+        }
+
+        .pagination a,
+        .pagination span {
+            padding: 8px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .pagination a {
+            background-color: #eee;
+            color: #333;
+        }
+
+        .pagination a:hover {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+        }
+
+        .pagination span.active {
+            background-color: #333;
+            color: white;
+            font-weight: bold;
+        }
+
+        .pagination span.disabled {
+            background-color: #ccc;
+            color: white;
+            pointer-events: none;
+        }
+
+        /* Mobile-friendly */
+        @media (max-width: 600px) {
+
+            .pagination a,
+            .pagination span {
+                font-size: 14px;
+                padding: 6px 10px;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <h1>🖼️ Pexels Photo Gallery</h1>
+    <h1>Pexels Photo Gallery</h1>
     <!-- 🔍 Thanh tìm kiếm -->
     <form method="get" action="/" style="margin-bottom: 20px; text-align: left;">
         <input type="text" name="q" placeholder="Type something to search (Ex: Tiger)" value="{{ current_query }}"
@@ -57,6 +134,17 @@
             style="height: 40px; padding: 10px; border: none; background-color: #3498db; color: white; border-radius: 5px; cursor: pointer;">
             🔍 Tìm kiếm
         </button>
+        <div style="float:right">
+            <input type="text" name="per_page" placeholder="20" value="{{ per_page }}" title="Photos per page"
+                pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                onkeypress="if (event.key === 'Enter') { this.form.submit(); }"
+                style="font-size: 16px; padding: 10px; width: 300px; max-width: 90%; border-radius: 5px; border: 1px solid #ccc;">
+        </div>
+        <!-- <button onclick="toggleDarkMode()"
+            style="float:right; margin-bottom: 20px; padding: 8px 12px; border-radius: 5px; background-color: #333; color: white; border: none; cursor: pointer;">
+            🌙 Toggle Dark Mode
+        </button> -->
+
     </form>
     <div class="grid">
         {% for photo in photos %}
@@ -69,6 +157,61 @@
         </div>
         {% endfor %}
     </div>
+
+    <div class="pagination">
+
+        {% if page > 1 %}
+        <a href="/?q={{ current_query }}&c={{ current_color }}&page={{ page - 1 }}&per_page={{ per_page }}">⬅️
+            Previous</a>
+        {% else %}
+        <span class="disabled">⬅️ Previous</span>
+        {% endif %}
+
+        {% set start_page = page - 3 if page - 3 > 1 else 1 %}
+        {% set end_page = page + 3 if page + 3 < total_pages else total_pages %} {% if start_page> 1 %}
+            <a href="/?q={{ current_query }}&c={{ current_color }}&page=1&per_page={{ per_page }}">1</a>
+            {% if start_page > 2 %}
+            <span>…</span>
+            {% endif %}
+            {% endif %}
+
+            {% for p in range(start_page, end_page + 1) %}
+            {% if p == page %}
+            <span class="active">{{ p }}</span>
+            {% else %}
+            <a href="/?q={{ current_query }}&c={{ current_color }}&page={{ p }}&per_page={{ per_page }}">{{ p }}</a>
+            {% endif %}
+            {% endfor %}
+
+            {% if end_page < total_pages %} {% if end_page < total_pages - 1 %} <span>…</span>
+                {% endif %}
+                <a href="/?q={{ current_query }}&c={{ current_color }}&page={{ total_pages }}&per_page={{ per_page }}">{{
+                    total_pages }}</a>
+                {% endif %}
+
+                {% if page < total_pages %} <a
+                    href="/?q={{ current_query }}&c={{ current_color }}&page={{ page + 1 }}&per_page={{ per_page }}">
+                    Next ➡️</a>
+                    {% else %}
+                    <span class="disabled">Next ➡️</span>
+                    {% endif %}
+    </div>
+
+    <footer style="margin-top: 50px; text-align: center; color: #777;">
+        <p>© 2023 Pexels Photo Gallery. All rights reserved.</p>
+        <p>Powered by <a href="https://www.pexels.com/" target="_blank" style="color: #3498db;">Pexels</a></p>
+    </footer>
+    <!-- <script>
+        window.onload = function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+    </script>
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+        }
+    </script> -->
+
 
 </body>
 

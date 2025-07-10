@@ -3,9 +3,10 @@ import requests
 from Control.photo import Photo, Root
 
 
-def get_photos(query: str, color: str) -> [Photo]:  # type: ignore
-
-    url = f"https://api.pexels.com/v1/search?query={query}&orientation=landscape&size=large&color={color}&locale=&page=1&per_page=100"
+def get_photos(query: str, color: str, page: int = 1, per_page: int = 80) -> tuple[list[Photo], int]:  # type: ignore
+    url = f"https://api.pexels.com/v1/search?query={query}&orientation=landscape&size=large&color={color}&locale=&page={page}&per_page={per_page}"
+    print(f"URL: {url}")  # In ra URL để kiểm tra
+    # Thêm header Authorization với API key
     headers = {
         "Authorization": "Y3dDyi8upPyObSyzc6swlKMR0YyGgfLunIoHCvgkXwALQ9cev030eIMQ"
     }
@@ -14,14 +15,11 @@ def get_photos(query: str, color: str) -> [Photo]:  # type: ignore
 
     if response.status_code == 200:
         data = response.json()
-        photos = Root.from_dict(
-            data
-        ).photos  # Chuyển đổi dữ liệu JSON thành đối tượng Root và lấy thuộc tính photos
-        # Hoặc bạn có thể sử dụng Root.from_dict(data) để lấy toàn bộ đối
-        # tượng Root nếu cần thiết
-        print(f"Số lượng ảnh: {len(photos)}")
-        # print(f"Tên nhiếp ảnh gia ảnh đầu tiên: {photos[0].photographer}")
-        return photos  # Trả về dữ liệu JSON
+        photos = Root.from_dict(data).photos
+        total = data.get("total_results", 0)  # Lấy số lượng kết quả từ JSON gốc
+        print(f"Số ảnh trong trang hiện tại: {len(photos)} / Tổng: {total}")
+        return photos, total
     else:
         print("Gọi API thất bại:", response.status_code)
-        return None
+        return [], 0
+
