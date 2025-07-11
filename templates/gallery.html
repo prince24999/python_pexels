@@ -129,28 +129,36 @@
     <!-- 🔍 Thanh tìm kiếm -->
     <form method="get" action="/" style="margin-bottom: 20px; text-align: left;">
         <input type="text" name="q" placeholder="Type something to search (Ex: Tiger)" value="{{ current_query }}"
-            style="font-size: 16px; padding: 10px; width: 300px; max-width: 90%; border-radius: 5px; border: 1px solid #ccc;">
+            style="margin-bottom: 5px; font-size: 16px; padding: 10px; width: 282px; max-width: 100%; border-radius: 5px; border: 1px solid #ccc;">
         <label for="color">Color:</label>
         <select id="color" name="c"
             style="height: 40px; font-size: 16px; padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
             <option value="">All</option>
+            <option value="orange">Orange</option>
+            <option value="yellow">Yellow</option>
+            <option value="green">Green</option>
+            <option value="turquoise">Turquoise</option>
+            <option value="blue">Blue</option>
+            <option value="violet">Violet</option>
+            <option value="pink">Pink</option>
+            <option value="brown">Brown</option>
             <option value="black">Black</option>
+            <option value="gray">Gray</option>
             <option value="white">White</option>
-            <option value="red">Red</option>
         </select>
 
         <button type="submit"
-            style="height: 40px; padding: 10px; border: none; background-color: #3498db; color: white; border-radius: 5px; cursor: pointer;">
-            🔍 Tìm kiếm
+            style="height: 40px; width: 60px; padding: 10px; border: none; background-color: #3498db; color: white; border-radius: 5px; cursor: pointer;">
+            🔍
         </button>
 
-        <div style="float:right; width: 70px; margin-right: 15px;">
+        <!-- <div style="float:right; width: 70px; margin-right: 15px;">
 
             <input type="text" name="per_page" placeholder="20" value="{{ per_page }}" title="Photos per page"
                 pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                 onkeypress="if (event.key === 'Enter') { this.form.submit(); }"
                 style="font-size: 16px; padding: 10px; width: 300px; max-width: 90%; border-radius: 5px; border: 1px solid #ccc;">
-        </div>
+        </div> -->
 
 
     </form>
@@ -165,7 +173,9 @@
         </div> -->
 
         <div class="card">
-            <a href="{{ photo.src.original }}" target="_blank">
+            <a href="{{ url_for('photoview') }}?img={{ photo.src.original }}&alt={{ photo.alt }}&pgr={{ photo.photographer }}"
+                target="_blank">
+
                 <div class="spinner-wrapper">
                     <div class="spinner"></div>
                 </div>
