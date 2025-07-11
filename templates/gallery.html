@@ -5,8 +5,30 @@
     <meta charset="UTF-8">
     <title>Gallery</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200&display=swap" rel="stylesheet">
 
     <style>
+        @font-face {
+            font-family: 'PoppinsVN';
+            src: url('/static/fonts/Poppins-ExtraLight.ttf') format('truetype');
+            font-weight: 200;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'PoppinsVN';
+            src: url('/static/fonts/Poppins-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'PoppinsVN';
+            src: url('/static/fonts/Poppins-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
         .spinner {
             width: 50px;
             height: 50px;
@@ -41,10 +63,15 @@
         }
 
         body {
-            font-family: sans-serif;
+            font-family: 'PoppinsVN', sans-serif;
+            font-weight: 200;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #000;
+            /* nền đen */
+            color: white;
+            /* chữ trắng */
         }
+
 
         .grid {
             display: grid;
@@ -53,22 +80,19 @@
         }
 
         .card {
-            background: white;
+            background: #242424;
+            /* nền xám đậm để dễ đọc */
+            color: white;
+
             padding: 10px;
             border-radius: 8px;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .card img {
-            width: 100%;
-            border-radius: 5px;
-        }
-
-
         .info {
             margin-top: 8px;
             font-size: 0.9em;
-            color: #555;
+            color: #ccc;
         }
 
         .pagination {
@@ -81,6 +105,7 @@
 
         .pagination a,
         .pagination span {
+
             padding: 8px 12px;
             border-radius: 4px;
             text-decoration: none;
@@ -89,8 +114,8 @@
         }
 
         .pagination a {
-            background-color: #eee;
-            color: #333;
+            background-color: #333;
+            color: white;
         }
 
         .pagination a:hover {
@@ -100,14 +125,14 @@
         }
 
         .pagination span.active {
-            background-color: #333;
+            background-color: #3498db;
             color: white;
             font-weight: bold;
         }
 
         .pagination span.disabled {
-            background-color: #ccc;
-            color: white;
+            background-color: #444;
+            color: #aaa;
             pointer-events: none;
         }
 
@@ -119,6 +144,54 @@
                 font-size: 14px;
                 padding: 6px 10px;
             }
+        }
+
+        footer {
+            color: #aaa;
+        }
+
+        footer a {
+            color: #3498db;
+        }
+
+        h1,
+        input,
+        select,
+        button,
+        label,
+        footer,
+        .pagination a,
+        .pagination span,
+        .card,
+        .info {
+            font-family: 'PoppinsVN', sans-serif;
+            font-weight: 200;
+        }
+
+        input::placeholder {
+            font-family: 'PoppinsVN', sans-serif;
+            font-weight: 200;
+            color: #ccc;
+        }
+
+        /* Safari */
+        input::-webkit-input-placeholder {
+            font-family: 'PoppinsVN', sans-serif;
+        }
+
+        /* Firefox */
+        input::-moz-placeholder {
+            font-family: 'PoppinsVN', sans-serif;
+        }
+
+        /* Edge */
+        input:-ms-input-placeholder {
+            font-family: 'PoppinsVN', sans-serif;
+        }
+
+        /* Old IE */
+        input::-ms-input-placeholder {
+            font-family: 'PoppinsVN', sans-serif;
         }
     </style>
 
@@ -152,25 +225,10 @@
             🔍
         </button>
 
-        <!-- <div style="float:right; width: 70px; margin-right: 15px;">
-
-            <input type="text" name="per_page" placeholder="20" value="{{ per_page }}" title="Photos per page"
-                pattern="\d*" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                onkeypress="if (event.key === 'Enter') { this.form.submit(); }"
-                style="font-size: 16px; padding: 10px; width: 300px; max-width: 90%; border-radius: 5px; border: 1px solid #ccc;">
-        </div> -->
-
 
     </form>
     <div class="grid">
         {% for photo in photos %}
-        <!-- <div class="card">
-
-            <a href="{{ photo.src.original }}" target="_blank">
-                <img src="{{ photo.src.medium }}" alt="{{ photo.alt }}">
-            </a>
-            <div class="info"><i>{{ photo.alt }}</i> - 📷 <b>{{ photo.photographer }}</b></div>
-        </div> -->
 
         <div class="card">
             <a href="{{ url_for('photoview') }}?img={{ photo.src.original }}&alt={{ photo.alt }}&pgr={{ photo.photographer }}"
@@ -195,13 +253,13 @@
 
         {% if page > 1 %}
         <a href="/?q={{ current_query }}&c={{ current_color }}&page={{ page - 1 }}&per_page={{ per_page }}">⬅️
-            Previous</a>
+        </a>
         {% else %}
-        <span class="disabled">⬅️ Previous</span>
+        <span class="disabled">⬅️ </span>
         {% endif %}
 
-        {% set start_page = page - 3 if page - 3 > 1 else 1 %}
-        {% set end_page = page + 3 if page + 3 < total_pages else total_pages %} {% if start_page> 1 %}
+        {% set start_page = page - 1 if page - 1 > 1 else 1 %}
+        {% set end_page = page + 1 if page + 1 < total_pages else total_pages %} {% if start_page> 1 %}
             <a href="/?q={{ current_query }}&c={{ current_color }}&page=1&per_page={{ per_page }}">1</a>
             {% if start_page > 2 %}
             <span>…</span>
@@ -224,9 +282,9 @@
 
                 {% if page < total_pages %} <a
                     href="/?q={{ current_query }}&c={{ current_color }}&page={{ page + 1 }}&per_page={{ per_page }}">
-                    Next ➡️</a>
+                    ➡️</a>
                     {% else %}
-                    <span class="disabled">Next ➡️</span>
+                    <span class="disabled"> ➡️</span>
                     {% endif %}
     </div>
 

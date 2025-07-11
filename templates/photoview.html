@@ -3,7 +3,29 @@
 
 <head>
     <title>Photo View</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200&display=swap" rel="stylesheet">
     <style>
+        @font-face {
+            font-family: 'PoppinsVN';
+            src: url('/static/fonts/Poppins-ExtraLight.ttf') format('truetype');
+            font-weight: 200;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'PoppinsVN';
+            src: url('/static/fonts/Poppins-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'PoppinsVN';
+            src: url('/static/fonts/Poppins-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,13 +34,49 @@
 
         html,
         body {
+            font-family: 'PoppinsVN', sans-serif;
+            font-weight: 200;
             width: 100vw;
             height: 100vh;
             overflow: hidden;
-            font-family: Arial, sans-serif;
+
             background-color: #000;
             color: white;
         }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #ccc;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: auto auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .spinner-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* full chiều cao */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+
 
         .card {
             position: relative;
@@ -30,7 +88,7 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            display: block;
+            display: none;
         }
 
         .info {
@@ -62,11 +120,68 @@
         .info button:hover {
             background-color: #ddd;
         }
+
+        h1,
+        input,
+        select,
+        button,
+        label,
+        footer,
+        .pagination a,
+        .pagination span,
+        .card,
+        .info {
+            font-family: 'PoppinsVN', sans-serif;
+            font-weight: 200;
+        }
+
+        h1,
+        input,
+        select,
+        button,
+        label,
+        footer,
+        .pagination a,
+        .pagination span,
+        .card,
+        .info {
+            font-family: 'PoppinsVN', sans-serif;
+            font-weight: 200;
+        }
+
+        input::placeholder {
+            font-family: 'PoppinsVN', sans-serif;
+            font-weight: 200;
+            color: #ccc;
+        }
+
+        /* Safari */
+        input::-webkit-input-placeholder {
+            font-family: 'PoppinsVN', sans-serif;
+        }
+
+        /* Firefox */
+        input::-moz-placeholder {
+            font-family: 'PoppinsVN', sans-serif;
+        }
+
+        /* Edge */
+        input:-ms-input-placeholder {
+            font-family: 'PoppinsVN', sans-serif;
+        }
+
+        /* Old IE */
+        input::-ms-input-placeholder {
+            font-family: 'PoppinsVN', sans-serif;
+        }
     </style>
 </head>
 
 <body>
     <div class="card">
+        <div class="spinner-wrapper">
+            <div class="spinner"></div>
+        </div>
         <img src="{{ image_url }}" alt="{{ alt_text }}">
         <div class="info">
             <div><i>{{ alt_text }}</i> - 📷 <b>{{ photographer }}</b></div>
@@ -76,7 +191,20 @@
         </div>
     </div>
 
+    <script>
+        document.querySelectorAll(".card img").forEach(function (img) {
+            img.addEventListener("load", function () {
+                const spinner = img.previousElementSibling;
+                if (spinner) spinner.style.display = "none"; // Ẩn spinner
+                img.style.display = "block"; // Hiện ảnh
+            });
 
+            // Nếu ảnh đã được cache trước đó
+            if (img.complete) {
+                img.dispatchEvent(new Event("load"));
+            }
+        });
+    </script>
 </body>
 
 </html>
